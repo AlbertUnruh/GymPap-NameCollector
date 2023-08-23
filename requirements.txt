@@ -1,0 +1,6 @@
+# all vendored requirements
+-r vendor/requirements.txt
+
+
+# all project requirements
+requests~=2.31.0
