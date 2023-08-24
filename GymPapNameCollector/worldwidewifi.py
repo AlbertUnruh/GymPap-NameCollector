@@ -1,11 +1,13 @@
 __all__ = ("Browser",)
 
 
+from requests.models import Response
 from requests.sessions import Session
 from typing import Iterable
 
 from vendor.AlbertUnruhUtils.utils.logger import get_logger
 
+from .analytics import Page
 from .constants import USER_AGENT, PROTOCOL, WEBSITE_NAME, WEBSITE_PATH, LAST_PAGE
 
 
@@ -13,27 +15,31 @@ logger = get_logger(__name__.split(".", 1)[1], add_handler=False)
 logger.manager.getLogger("urllib3.connectionpool").setLevel("INFO")
 
 
+def get(url: str) -> Response:
+    logger.info(f"Requesting {url}")
+    with Session() as session:
+        response = session.request(method="GET", url=url, headers={"User-Agent": USER_AGENT})
+    return response
+
+
 class Browser:
-    header: dict[str, str] = {"User-Agent": USER_AGENT}
     url: str = f"{PROTOCOL}://{WEBSITE_NAME}/{WEBSITE_PATH.lstrip('/')}"
 
     _cur_page: int = 1
 
-    def get_page(self, page: int, /) -> str:
+    def get_page(self, page: int, /) -> Page:
         url = self.url.format(page)
-        logger.info(f"Requesting {url}")
-        with Session() as session:
-            response = session.request(method="GET", url=url, headers=self.header)
-        return response.text
+        response = get(url)
+        return Page(response.text)
 
-    def get_next_page(self) -> str:
+    def get_next_page(self) -> Page:
         page = self.get_page(self._cur_page)
         self._cur_page += 1
         logger.debug(f"Page incremented to {self._cur_page}")
         return page
 
-    def iter_pages(self) -> Iterable[str]:
-        page: str
+    def iter_pages(self) -> Iterable[Page]:
+        page: Page
         while True:
             page = self.get_next_page()
             yield page
