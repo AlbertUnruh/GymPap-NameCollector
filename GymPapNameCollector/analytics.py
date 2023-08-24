@@ -1,9 +1,11 @@
 __all__ = ("Name", "Article", "Page")
 
 
+import bs4
+
 from vendor.AlbertUnruhUtils.utils.logger import get_logger
 
-from .constants import BLACKLISTED_NAMES, ARTICLE_URL, PROTOCOL, WEBSITE_NAME
+from .constants import BLACKLISTED_NAMES, ARTICLE_URL, PROTOCOL, WEBSITE_NAME, DIV_ID
 
 
 logger = get_logger(__name__.split(".", 1)[1], add_handler=False)
@@ -28,11 +30,15 @@ class Article(str):
     def __init__(self, object: str = ""):
         self.article = object
 
+    def get_content(self) -> str:
+        soup = bs4.BeautifulSoup(self.article, features="html.parser")
+        return soup.find("div", {"id": DIV_ID})
+
     def find_names(self) -> list[Name]:
         name: str
         names: dict[str, Name] = {}
-        for name in filter(lambda s: s.istitle(), self.article.split()):
-            name = name.strip("-\"„'<>").removesuffix(".")
+        for name in filter(lambda s: s.istitle(), str(self.get_content()).split()):
+            name = name.strip("-\"„“',<>():.")
             if name in BLACKLISTED_NAMES:
                 continue
             if name not in names:

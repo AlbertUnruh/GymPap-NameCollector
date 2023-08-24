@@ -5,6 +5,7 @@ __all__ = (
     "USER_AGENT",
     "LAST_PAGE",
     "ARTICLE_URL",
+    "DIV_ID",
     "BLACKLISTED_NAMES_FILE",
     "BLACKLISTED_NAMES",
 )
@@ -25,6 +26,7 @@ USER_AGENT: str = "{__name__}/{__version__} ({__url__})"
 LAST_PAGE: re.Pattern[str] = re.compile(r"Aktuelles - Seite (\d+) von \1\D")
 ARTICLE_URL: re.Pattern[str] = re.compile(r"href=\"(/artikel/[^/]+/)\"")
 
+DIV_ID: str = "c1265"
 
 BLACKLISTED_NAMES_FILE: Path = Path(__file__).parent.joinpath(".blacklisted_names.txt")
 BLACKLISTED_NAMES: frozenset[str] = frozenset(BLACKLISTED_NAMES_FILE.read_text("utf-8", "ignore").splitlines(False))

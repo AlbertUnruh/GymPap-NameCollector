@@ -1,6 +1,9 @@
-import GymPapNameCollector
+from GymPapNameCollector import analytics, worldwidewifi as www
 
 
-browser = GymPapNameCollector.worldwidewifi.Browser()
+browser = www.Browser()
 for page in browser.iter_pages():
-    print(page.find_article_urls())
+    for url in page.find_article_urls():
+        article = analytics.Article(www.get(url).text)
+        print(article.find_names())
+        exit()
