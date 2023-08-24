@@ -9,7 +9,7 @@ from vendor.AlbertUnruhUtils.utils.logger import get_logger
 from .constants import USER_AGENT, PROTOCOL, WEBSITE_NAME, WEBSITE_PATH, LAST_PAGE
 
 
-logger = get_logger(__name__, add_handler=False)
+logger = get_logger(__name__.split(".", 1)[1], add_handler=False)
 logger.manager.getLogger("urllib3.connectionpool").setLevel("INFO")
 
 
@@ -39,4 +39,9 @@ class Browser:
             yield page
             if LAST_PAGE.search(page):
                 logger.info(f"Last page reached")
+                self.reset_cur_page()
                 return
+
+    def reset_cur_page(self) -> None:
+        logger.debug(f"Resetting `_cur_page` from {self._cur_page} to {self.__class__._cur_page}")
+        self._cur_page = self.__class__._cur_page
