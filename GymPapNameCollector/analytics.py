@@ -2,13 +2,33 @@ __all__ = ("Name", "Article", "Page")
 
 
 import bs4
+from typing import TypedDict
 
 from vendor.AlbertUnruhUtils.utils.logger import get_logger
 
-from .constants import BLACKLISTED_NAMES, ARTICLE_URL, PROTOCOL, WEBSITE_NAME, DIV_ID
+from .constants import (
+    BLACKLISTED_NAMES,
+    ARTICLE_URL,
+    PROTOCOL,
+    WEBSITE_NAME,
+    BODY_ATTRS,
+    HEADER_ATTRS,
+    AUTHOR_ATTRS,
+    AUTHOR_PATTERN,
+    TEASER_ATTRS,
+    TEXT_ATTRS,
+    NAME_PATTERN,
+)
 
 
 logger = get_logger(__name__.split(".", 1)[1], add_handler=False)
+
+
+class Content(TypedDict):
+    header: str
+    author: str
+    teaser: str
+    text: str
 
 
 class Name(str):
@@ -30,20 +50,31 @@ class Article(str):
     def __init__(self, object: str = ""):
         self.article = object
 
-    def get_content(self) -> str:
+    def get_content(self) -> Content:
         soup = bs4.BeautifulSoup(self.article, features="html.parser")
-        return soup.find("div", {"id": DIV_ID})
+        body = soup.find(*BODY_ATTRS)
+        content: Content = {
+            "header": body.find(*HEADER_ATTRS).text,
+            "author": AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).text).group(1),
+            "teaser": body.find(*TEASER_ATTRS).text,
+            "text": body.find(*TEXT_ATTRS).text,
+        }
+        for k, v in content.items():
+            content[k] = v.strip()  # noqa
+        return content
 
     def find_names(self) -> list[Name]:
         name: str
         names: dict[str, Name] = {}
-        for name in filter(lambda s: s.istitle(), str(self.get_content()).split()):
-            name = name.strip("-\"„“',<>():.")
-            if name in BLACKLISTED_NAMES:
-                continue
-            if name not in names:
-                names[name] = Name(name)
-            names[name].amount += 1
+        for s in self.get_content().values():
+            for name in filter(lambda _: _.istitle(), s.split()):
+                # ToDo: use pattern recognition since names are in a pack of two (Forename, Surname)
+                name = name.strip("-\"„“',<>():.")
+                if name in BLACKLISTED_NAMES:
+                    continue
+                if name not in names:
+                    names[name] = Name(name)
+                names[name].amount += 1
         return list(names.values())
 
 

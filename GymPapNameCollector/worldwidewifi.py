@@ -18,7 +18,7 @@ logger.manager.getLogger("urllib3.connectionpool").setLevel("INFO")
 def get(url: str) -> Response:
     logger.info(f"Requesting {url}")
     with Session() as session:
-        response = session.request(method="GET", url=url, headers={"User-Agent": USER_AGENT})
+        response = session.request(method="GET", url=url, headers={"User-Agent": USER_AGENT, "DNT": "1"})
     return response
 
 
