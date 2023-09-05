@@ -10,6 +10,7 @@ __all__ = (
     "AUTHOR_ATTRS",
     "TEASER_ATTRS",
     "TEXT_ATTRS",
+    "STR_TO_STRIP",
     "AUTHOR_PATTERN",
     "NAME_PATTERN",
     "NOT_A_NAME_FILE",
@@ -38,8 +39,9 @@ AUTHOR_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "extra"})
 TEASER_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "lead", "itemprop": "description"})
 TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "itemprop": "articleBody"})
 
+STR_TO_STRIP: str = "-\"„“',<>():. \n"
 AUTHOR_PATTERN: re.Pattern[str] = re.compile(r"\s*Von\s+([^|]+)\s+")
-NAME_PATTERN: re.Pattern[str] = re.compile(r"")
+NAME_PATTERN: re.Pattern[str] = re.compile(rf"([A-Z][^{STR_TO_STRIP}]+\s[A-Z]\S+)")
 
 NOT_A_NAME_FILE: Path = Path(__file__).parent.joinpath(".not_a_name.txt")
 NOT_A_NAME: frozenset[str] = frozenset(NOT_A_NAME_FILE.read_text("utf-8", "ignore").splitlines(False))

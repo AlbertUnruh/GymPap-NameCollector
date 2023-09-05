@@ -18,6 +18,7 @@ from .constants import (
     TEASER_ATTRS,
     TEXT_ATTRS,
     NAME_PATTERN,
+    STR_TO_STRIP,
 )
 
 
@@ -74,9 +75,8 @@ class Article(str):
         name: str
         names: dict[str, Name] = {}
         for s in self.get_invalidated_content().values():
-            for name in filter(lambda _: _.istitle(), s.split()):
-                # ToDo: use pattern recognition since names are in a pack of two (Forename, Surname)
-                name = name.strip("-\"„“',<>():.")
+            for res in NAME_PATTERN.finditer(s):
+                name = res.group(0).strip(STR_TO_STRIP)
                 if name not in names:
                     names[name] = Name(name)
                 names[name].amount += 1
