@@ -12,8 +12,8 @@ __all__ = (
     "TEXT_ATTRS",
     "AUTHOR_PATTERN",
     "NAME_PATTERN",
-    "BLACKLISTED_NAMES_FILE",
-    "BLACKLISTED_NAMES",
+    "NOT_A_NAME_FILE",
+    "NOT_A_NAME",
 )
 
 
@@ -41,5 +41,5 @@ TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "it
 AUTHOR_PATTERN: re.Pattern[str] = re.compile(r"\s*Von\s+([^|]+)\s+")
 NAME_PATTERN: re.Pattern[str] = re.compile(r"")
 
-BLACKLISTED_NAMES_FILE: Path = Path(__file__).parent.joinpath(".blacklisted_names.txt")
-BLACKLISTED_NAMES: frozenset[str] = frozenset(BLACKLISTED_NAMES_FILE.read_text("utf-8", "ignore").splitlines(False))
+NOT_A_NAME_FILE: Path = Path(__file__).parent.joinpath(".not_a_name.txt")
+NOT_A_NAME: frozenset[str] = frozenset(NOT_A_NAME_FILE.read_text("utf-8", "ignore").splitlines(False))

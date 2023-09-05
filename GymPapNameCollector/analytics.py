@@ -7,7 +7,7 @@ from typing import TypedDict
 from vendor.AlbertUnruhUtils.utils.logger import get_logger
 
 from .constants import (
-    BLACKLISTED_NAMES,
+    NOT_A_NAME,
     ARTICLE_URL,
     PROTOCOL,
     WEBSITE_NAME,
@@ -63,15 +63,20 @@ class Article(str):
             content[k] = v.strip()  # noqa
         return content
 
+    def get_invalidated_content(self) -> Content:
+        # Note: "~" is used to invalidate names
+        content: Content = self.get_content()
+        for k, v in content.items():
+            content[k] = " ".join((w if w not in NOT_A_NAME else f"~{w}") for w in v.split())  # noqa
+        return content
+
     def find_names(self) -> list[Name]:
         name: str
         names: dict[str, Name] = {}
-        for s in self.get_content().values():
+        for s in self.get_invalidated_content().values():
             for name in filter(lambda _: _.istitle(), s.split()):
                 # ToDo: use pattern recognition since names are in a pack of two (Forename, Surname)
                 name = name.strip("-\"„“',<>():.")
-                if name in BLACKLISTED_NAMES:
-                    continue
                 if name not in names:
                     names[name] = Name(name)
                 names[name].amount += 1
