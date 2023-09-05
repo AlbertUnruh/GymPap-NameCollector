@@ -8,8 +8,10 @@ __all__ = (
     "BODY_ATTRS",
     "HEADER_ATTRS",
     "AUTHOR_ATTRS",
+    "CAPTION_ATTRS",
     "TEASER_ATTRS",
     "TEXT_ATTRS",
+    "STR_TO_REMOVE",
     "STR_TO_STRIP",
     "AUTHOR_PATTERN",
     "NAME_PATTERN",
@@ -36,12 +38,14 @@ ARTICLE_URL: re.Pattern[str] = re.compile(r"href=\"(/artikel/[^/]+/)\"")
 BODY_ATTRS: tuple[str, dict[str, str]] = ("div", {"id": "c1265"})
 HEADER_ATTRS: tuple[str, dict[str, str]] = ("h1", {"class": "headline", "itemprop": "headline"})
 AUTHOR_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "extra"})
+CAPTION_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "caption"})
 TEASER_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "lead", "itemprop": "description"})
 TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "itemprop": "articleBody"})
 
-STR_TO_STRIP: str = "-\"„“',<>():. \n"
+STR_TO_REMOVE: str = "\"„“'"
+STR_TO_STRIP: str = f"-,<>():.!? \n{STR_TO_REMOVE}"
 AUTHOR_PATTERN: re.Pattern[str] = re.compile(r"\s*Von\s+([^|]+)\s+")
-NAME_PATTERN: re.Pattern[str] = re.compile(rf"([A-Z][^{STR_TO_STRIP}]+\s[A-Z]\S+)")
+NAME_PATTERN: re.Pattern[str] = re.compile(rf"(?<!~)([A-Z][^{STR_TO_STRIP}]+ (?<!~)[A-Z]\S+)")
 
 NOT_A_NAME_FILE: Path = Path(__file__).parent.joinpath(".not_a_name.txt")
 NOT_A_NAME: frozenset[str] = frozenset(NOT_A_NAME_FILE.read_text("utf-8", "ignore").splitlines(False))

@@ -15,10 +15,12 @@ from .constants import (
     HEADER_ATTRS,
     AUTHOR_ATTRS,
     AUTHOR_PATTERN,
+    CAPTION_ATTRS,
     TEASER_ATTRS,
     TEXT_ATTRS,
     NAME_PATTERN,
     STR_TO_STRIP,
+    STR_TO_REMOVE,
 )
 
 
@@ -57,6 +59,7 @@ class Article(str):
         content: Content = {
             "header": body.find(*HEADER_ATTRS).text,
             "author": AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).text).group(1),
+            "caption": _.text if (_ := body.find(*CAPTION_ATTRS)) else "",  # caption may not be present
             "teaser": body.find(*TEASER_ATTRS).text,
             "text": body.find(*TEXT_ATTRS).text,
         }
@@ -68,7 +71,13 @@ class Article(str):
         # Note: "~" is used to invalidate names
         content: Content = self.get_content()
         for k, v in content.items():
-            content[k] = " ".join((w if w not in NOT_A_NAME else f"~{w}") for w in v.split())  # noqa
+            content[k] = " ".join(  # noqa
+                (w if w not in NOT_A_NAME else f"~{w}").translate(str.maketrans("", "", STR_TO_REMOVE.replace("~", "")))
+                for w in v.split()
+            )
+            print(k)
+            print(content[k])
+            print()
         return content
 
     def find_names(self) -> list[Name]:
