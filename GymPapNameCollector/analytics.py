@@ -56,12 +56,13 @@ class Article(str):
     def get_content(self) -> Content:
         soup = bs4.BeautifulSoup(self.article, features="html.parser")
         body = soup.find(*BODY_ATTRS)
+        sep: str = " | "  # to prevent colliding words and "|" to keep sentences logically separated
         content: Content = {
-            "header": body.find(*HEADER_ATTRS).text,
-            "author": AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).text).group(1),
-            "caption": _.text if (_ := body.find(*CAPTION_ATTRS)) else "",  # caption may not be present
-            "teaser": body.find(*TEASER_ATTRS).text,
-            "text": body.find(*TEXT_ATTRS).text,
+            "header": body.find(*HEADER_ATTRS).get_text(sep),
+            "author": AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).get_text(sep)).group(1),
+            "caption": _.get_text(sep) if (_ := body.find(*CAPTION_ATTRS)) else "",  # caption may not be present
+            "teaser": body.find(*TEASER_ATTRS).get_text(sep),
+            "text": body.find(*TEXT_ATTRS).get_text(sep),
         }
         for k, v in content.items():
             content[k] = v.strip()  # noqa
@@ -72,12 +73,10 @@ class Article(str):
         content: Content = self.get_content()
         for k, v in content.items():
             content[k] = " ".join(  # noqa
-                (w if w not in NOT_A_NAME else f"~{w}").translate(str.maketrans("", "", STR_TO_REMOVE.replace("~", "")))
+                # this long line is definitely *not* a crime ^^
+                (w if w.strip(STR_TO_STRIP) not in NOT_A_NAME else f"~{w.lstrip(STR_TO_REMOVE)}")
                 for w in v.split()
             )
-            print(k)
-            print(content[k])
-            print()
         return content
 
     def find_names(self) -> list[Name]:
