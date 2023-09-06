@@ -1,4 +1,4 @@
-__all__ = ("Name", "Article", "Page")
+__all__ = ("Name", "merge_names_into_list", "Article", "Page")
 
 
 import bs4
@@ -47,6 +47,16 @@ class Name(str):
     __repr__ = __str__
 
 
+def merge_names_into_list(*_names: Name) -> list[Name]:
+    # ``regex:/names?/gi`` is only used 23 times in this function...
+    names: dict[str, Name] = {}
+    for name in _names:
+        if name.name not in names:
+            names[name.name] = Name(name.name)
+        names[name.name].amount += name.amount
+    return list(names.values())
+
+
 class Article(str):
     article: str
 
@@ -59,7 +69,7 @@ class Article(str):
         sep: str = " | "  # to prevent colliding words and "|" to keep sentences logically separated
         content: Content = {
             "header": body.find(*HEADER_ATTRS).get_text(sep),
-            "author": AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).get_text(sep)).group(1),
+            "author": _.group(1) if (_ := AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).get_text(sep))) else "",
             "caption": _.get_text(sep) if (_ := body.find(*CAPTION_ATTRS)) else "",  # caption may not be present
             "teaser": body.find(*TEASER_ATTRS).get_text(sep),
             "text": body.find(*TEXT_ATTRS).get_text(sep),

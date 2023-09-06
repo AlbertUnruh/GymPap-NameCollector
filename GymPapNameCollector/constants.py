@@ -42,8 +42,8 @@ CAPTION_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "caption"})
 TEASER_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "lead", "itemprop": "description"})
 TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "itemprop": "articleBody"})
 
-STR_TO_REMOVE: str = "\"„“'"
-STR_TO_STRIP: str = f"-,<>():.!? \n{STR_TO_REMOVE}"
+STR_TO_REMOVE: str = "\"„“'’"
+STR_TO_STRIP: str = f"-,<>():;.!? \n{STR_TO_REMOVE}"
 AUTHOR_PATTERN: re.Pattern[str] = re.compile(r"\s*Von\s+([^|]+)\s+")
 NAME_PATTERN: re.Pattern[str] = re.compile(rf"(?<!~)([A-Z][^{STR_TO_STRIP}]+ (?<!~)[A-Z]\S+)")
 
