@@ -9,6 +9,4 @@ for page in browser.iter_pages():
         article = analytics.Article(www.get(url).text)
         all_names = analytics.merge_names_into_list(*all_names, *article.find_names())
 
-    # still work in progress here...
-    print(*sorted(all_names), sep="\n")
-    all_names = []
+print(*sorted(all_names), sep="\n")
