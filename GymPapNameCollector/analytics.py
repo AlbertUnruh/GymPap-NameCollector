@@ -36,13 +36,43 @@ class Content(TypedDict):
 
 class Name(str):
     amount: int = 0
-    name: str
+    _name: list[str]
 
     def __init__(self, object: str = ""):
-        self.name = object
+        self._name = object.split()
+
+        # valid name lengths: 2 and 3
+        # e.g. "FORENAME SURNAME" or "FORENAME SECOND-NAME SURNAME"
+        assert len(self._name) >= 2, f"Name {object!r} is to short!"
+        assert len(self._name) <= 3, f"Name {object!r} is to long!"
+
+    @property
+    def name(self) -> str:
+        # will only return forename and surname
+        return f"{self._name[0]} {self._name[-1]}"
+
+    @property
+    def full_name(self) -> str:
+        if len(self._name) == 2:
+            return " ".join(self._name)
+        return "{0} ({1}) {2}".format(*self._name)
+
+    @property
+    def has_second_name(self) -> bool:
+        return len(self._name) == 3
+
+    def __eq__(self, other) -> bool:
+        # same type?
+        if not isinstance(other, Name):
+            return NotImplemented
+        # do both have a second name?
+        if other.has_second_name and self.has_second_name:
+            return other.full_name == self.full_name
+        # just compare forename and surname
+        return other.name == self.name
 
     def __str__(self) -> str:
-        return "{0.name} ({0.amount}x)".format(self)
+        return "{0.full_name} ({0.amount}x)".format(self)
 
     __repr__ = __str__
 

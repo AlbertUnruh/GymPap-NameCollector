@@ -222,6 +222,7 @@ Ciao“-Versionen
 Cinematographie
 Circus
 Clausthal
+Clemenswerth
 Climate
 Cloppenburg
 Cloppenburg/Emsland
@@ -359,6 +360,7 @@ Ergebnisse
 Erkenntnisgewinnung
 Erlebnisreicher
 Erst
+Erste
 Ersten
 Erster
 Erwartungshorizonte
@@ -517,6 +519,7 @@ Gott
 Gottes
 Gottesdienstbesucher
 Gotteshaus
+Goyas
 Grafschaft
 Graphic
 Green
@@ -736,6 +739,7 @@ Koptischer
 Korrespondenten
 Kosten
 Koszalin
+Kraftvolle
 Kranheitssymptomen
 Kreises
 Kreishandwerkerschaft
@@ -853,6 +857,7 @@ Mannschaftsleistung
 March
 Marinemusikkorps
 Marktwirtschaft
+Marstall
 Maschinengewehre
 Maskenpflicht
 Matches
@@ -901,6 +906,7 @@ Mittel
 Mittelfeld
 Mittelfeldspieler
 Mittelfeldspielern
+Mittelkanal
 Mittelstürmer
 Mittwoch
 Mitzwa
@@ -1106,13 +1112,16 @@ Quiz
 RKI
 RWTH
 Racing
+Radierungen
 Radio
 Raiffeisenbank
 Range
 Rauchringe
 Raum
 Realschule
+Rechts
 Red
+Redakteur
 Referendar
 Referendare
 Referendariat
@@ -1166,6 +1175,7 @@ Schauspielers
 Schiefen
 Schlagzeuger
 Schlosskirche
+Schläge
 Schnelle
 Schnuppertag
 Schokolade
@@ -1194,6 +1204,7 @@ Schulsanitätern
 Schulsanitätsdienst
 Schulsekretärin
 Schulsieger
+Schulsozialpädagogin
 Schulwetbewerb
 Schulzentrums
 Schutzmasken
@@ -1519,6 +1530,7 @@ Weisenburger’s
 Weiter
 Weitere
 Weiteres
+Weitergabe
 Welche
 Weltausstellung
 Welthit
