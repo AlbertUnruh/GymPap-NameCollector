@@ -26,19 +26,19 @@ import re
 
 PROTOCOL: str = "https"
 WEBSITE_NAME: str = "www.gymnasium-papenburg.de"
-WEBSITE_PATH: str = "/aktuelles/seite/{}/"
+WEBSITE_PATH: str = "/aktuelles/{}/"
 
 USER_AGENT: str = "{__name__}/{__version__} ({__url__})"
 # populated with globals() in __init__.py
 # Yes, I'm just committing a crime...
 
-LAST_PAGE: re.Pattern[str] = re.compile(r"Aktuelles - Seite (\d+) von \1\D")
-ARTICLE_URL: re.Pattern[str] = re.compile(r"href=\"(/artikel/[^/]+/)\"")
+LAST_PAGE: re.Pattern[str] = re.compile(r'active">(?!.*"page-item").*?</ul>')
+ARTICLE_URL: re.Pattern[str] = re.compile(r"href=\"(/artikel/[^/]+?)\"")
 
 BODY_ATTRS: tuple[str, dict[str, str]] = ("div", {"id": "c1265"})
-HEADER_ATTRS: tuple[str, dict[str, str]] = ("h1", {"class": "headline", "itemprop": "headline"})
-AUTHOR_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "extra"})
-CAPTION_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "caption"})
+HEADER_ATTRS: tuple[str, dict[str, str]] = ("h1", {"itemprop": "headline"})
+AUTHOR_ATTRS: tuple[str, dict[str, str]] = ("li", {"class": "news-meta-item"})
+CAPTION_ATTRS: tuple[str, dict[str, str]] = ("figcaption", {"class": "image-caption"})
 TEASER_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "lead", "itemprop": "description"})
 TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "itemprop": "articleBody"})
 

@@ -95,14 +95,14 @@ class Article(str):
 
     def get_content(self) -> Content:
         soup = bs4.BeautifulSoup(self.article, features="html.parser")
-        body = soup.find(*BODY_ATTRS)
+        body = soup.find(BODY_ATTRS[0], **BODY_ATTRS[1])
         sep: str = " | "  # to prevent colliding words and "|" to keep sentences logically separated
         content: Content = {
-            "header": body.find(*HEADER_ATTRS).get_text(sep),
-            "author": _.group(1) if (_ := AUTHOR_PATTERN.search(body.find(*AUTHOR_ATTRS).get_text(sep))) else "",
-            "caption": _.get_text(sep) if (_ := body.find(*CAPTION_ATTRS)) else "",  # caption may not be present
-            "teaser": body.find(*TEASER_ATTRS).get_text(sep),
-            "text": body.find(*TEXT_ATTRS).get_text(sep),
+            "header": body.find(HEADER_ATTRS[0], **HEADER_ATTRS[1]).get_text(sep),
+            "author": _.group(1) if (_ := AUTHOR_PATTERN.search(body.find(AUTHOR_ATTRS[0], **AUTHOR_ATTRS[1]).get_text(sep))) else "",
+            "caption": _.get_text(sep) if (_ := body.find(CAPTION_ATTRS[0], **CAPTION_ATTRS[1])) else "",  # caption may not be present
+            "teaser": body.find(TEASER_ATTRS[0], **TEASER_ATTRS[1]).get_text(sep),
+            "text": body.find(TEXT_ATTRS[0], **TEXT_ATTRS[1]).get_text(sep),
         }
         for k, v in content.items():
             content[k] = v.strip()  # noqa
