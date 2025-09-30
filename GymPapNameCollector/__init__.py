@@ -1,5 +1,5 @@
 __author__ = "AlbertUnruh"
-__version__ = "0.6.1a"
+__version__ = "0.6.2a"
 __license__ = "GNU AGPLv3"
 __copyright__ = f"Copyright 2023-present (c) {__author__}"
 __url__ = "https://github.com/AlbertUnruh/GymPap-NameCollector"

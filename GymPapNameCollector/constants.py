@@ -45,7 +45,7 @@ TEXT_ATTRS: tuple[str, dict[str, str]] = ("div", {"class": "news-text-wrap", "it
 STR_TO_REMOVE: str = "\"„“”'’"
 STR_TO_STRIP: str = f"-,<>():;.!? \n{STR_TO_REMOVE}"
 AUTHOR_PATTERN: re.Pattern[str] = re.compile(r"\s*Von\s+([^|]+)\s+")
-NAME_PATTERN: re.Pattern[str] = re.compile(rf"(?<!~)([A-Z][^{STR_TO_STRIP}]+ (?<!~)[A-Z]\S+)")
+NAME_PATTERN: re.Pattern[str] = re.compile(fr"(?<!~)([A-Z][^{STR_TO_STRIP}]+ (?<!~)[A-Z]\S+)")
 
 NOT_A_NAME_FILE: Path = Path(__file__).parent.joinpath(".not_a_name.txt")
 NOT_A_NAME: frozenset[str] = frozenset(NOT_A_NAME_FILE.read_text("utf-8", "ignore").splitlines(False))
