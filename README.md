@@ -4,6 +4,7 @@ a project to scrape names from the GymPap website
 
 > [!NOTE]
 > To run the project first install the requirements via `pip install -r requirements.txt` and run `python -m GymPapNameCollector` afterwards.
+> <br>*Python version `3.11` or higher required.*
 
 > [!NOTE]
 > The code may take some time to finish scraping *every article* published... I've already encountered 10+ minutes. Time will increase as more articles get published...
